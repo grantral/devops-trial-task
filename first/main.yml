@@ -5,3 +5,7 @@
     - role: caddy_ansible.caddy_ansible
 
     - role: geerlingguy.gitlab
+
+    - role: prometheus.prometheus.prometheus
+    - role: prometheus.prometheus.node_exporter
+    - role: prometheus.prometheus.systemd_exporter
