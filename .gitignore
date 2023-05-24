@@ -1,0 +1,7 @@
+### Ansible ###
+**/*/group_vars/*.yml
+!first/group_vars/first.yml
+!second/group_vars/second.yml
+
+**/*/hosts*
+!**/*/hosts.example
