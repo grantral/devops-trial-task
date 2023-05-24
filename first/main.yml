@@ -1,0 +1,5 @@
+- name: Complete the first path
+  hosts: all
+  become: true
+  roles:
+    - role: geerlingguy.gitlab
