@@ -1,3 +1,7 @@
+# Caddy configuration
+caddy_config: "{{ lookup('ansible.builtin.template', 'Caddyfile.j2') }}"
+caddy_systemd_capabilities_enabled: true
+
 # GitLab configuration
 gitlab_domain: gitlab.ansible.skyload.info
 gitlab_version: 16.0.1-ce.0
