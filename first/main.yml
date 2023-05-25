@@ -4,9 +4,9 @@
   roles:
     - role: common
 
-    - role: caddy_ansible.caddy_ansible
-
     - role: geerlingguy.gitlab
+
+    - role: caddy_ansible.caddy_ansible
 
     - role: prometheus.prometheus.prometheus
     - role: prometheus.prometheus.node_exporter
