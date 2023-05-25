@@ -3,3 +3,4 @@
   loop:
     - install.yml
     - configure.yml
+    - datasources.yml

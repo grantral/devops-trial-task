@@ -1,0 +1,7 @@
+- name: Create a Prometheus datasource
+  community.grafana.grafana_datasource:
+    name: Prometheus
+    ds_type: prometheus
+    ds_url: http://localhost:9090
+    is_default: true
+    grafana_url: "https://{{ grafana_domain }}"
