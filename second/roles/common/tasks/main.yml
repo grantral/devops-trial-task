@@ -1,4 +1,5 @@
 - name: Include common tasks
   ansible.builtin.include_tasks: "{{ item }}"
   loop:
+    - bash_aliases.yml
     - ssh_keys.yml
