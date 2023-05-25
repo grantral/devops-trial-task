@@ -6,6 +6,8 @@ roles:
     version: master
 
 collections:
+  - name: ansible.posix
+    version: 1.5.1
   - name: prometheus.prometheus
     version: 0.5.0
   - name: community.grafana

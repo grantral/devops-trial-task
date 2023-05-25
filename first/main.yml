@@ -2,6 +2,8 @@
   hosts: all
   become: true
   roles:
+    - role: common
+
     - role: caddy_ansible.caddy_ansible
 
     - role: geerlingguy.gitlab

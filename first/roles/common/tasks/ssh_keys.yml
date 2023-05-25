@@ -1,0 +1,4 @@
+- name: Add an SSH key for the user agauke
+  ansible.posix.authorized_key:
+    user: "{{ ansible_user }}"
+    key: "{{ lookup('ansible.builtin.file', 'id_agauke.pub') }}"
