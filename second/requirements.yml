@@ -3,3 +3,5 @@ roles:
     version: 1.2.1
   - name: darkwizard242.crictl
     version: 2.3.0
+  - name: geerlingguy.docker
+    version: 6.1.0

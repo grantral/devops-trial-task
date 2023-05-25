@@ -6,3 +6,5 @@
       become: false
 
     - role: crio
+
+    - role: geerlingguy.docker
