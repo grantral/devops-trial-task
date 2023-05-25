@@ -4,3 +4,4 @@
     - install.yml
     - configure.yml
     - datasources.yml
+    - dashboards.yml

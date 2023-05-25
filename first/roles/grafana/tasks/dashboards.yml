@@ -1,0 +1,11 @@
+- name: Import the Node Exporter Full dashboard
+  community.grafana.grafana_dashboard:
+    grafana_url: "https://{{ grafana_domain }}"
+    dashboard_id: 1860
+    dashboard_revision: 31
+
+- name: Import the Prometheus 2.0 Stats dashboard
+  community.grafana.grafana_dashboard:
+    grafana_url: "https://{{ grafana_domain }}"
+    dashboard_id: 15489
+    dashboard_revision: 2
