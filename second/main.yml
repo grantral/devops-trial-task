@@ -4,3 +4,5 @@
   roles:
     - role: common
       become: false
+
+    - role: crio
