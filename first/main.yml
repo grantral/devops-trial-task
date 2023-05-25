@@ -9,3 +9,5 @@
     - role: prometheus.prometheus.prometheus
     - role: prometheus.prometheus.node_exporter
     - role: prometheus.prometheus.systemd_exporter
+
+    - role: grafana

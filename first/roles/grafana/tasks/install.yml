@@ -1,0 +1,17 @@
+- name: We cannot install the Grafana from the apt repository because it blocks Russian IPs, lmao
+  when: false
+  block:
+    - name: Download the Grafana repository signing key
+      ansible.builtin.get_url:
+        url: https://apt.grafana.com/gpg.key
+        dest: /usr/share/keyrings/grafana.key
+        mode: "0644"
+
+    - name: Add the Grafana repository for stable releases
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/grafana.key] https://apt.grafana.com stable main"
+        state: present
+
+- name: Install the Grafana OSS release from a deb package
+  ansible.builtin.apt:
+    deb: https://dl.grafana.com/oss/release/grafana_{{ grafana_version }}_amd64.deb

@@ -1,0 +1,5 @@
+- name: Include Grafana tasks
+  ansible.builtin.include_tasks: "{{ item }}"
+  loop:
+    - install.yml
+    - configure.yml

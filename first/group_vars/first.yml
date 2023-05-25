@@ -32,3 +32,7 @@ prometheus_scrape_configs:
     static_configs:
       - targets:
           - "{{ ansible_fqdn }}:9558"
+
+# Grafana configuration
+grafana_domain: grafana.ansible.skyload.info
+grafana_version: 9.5.2

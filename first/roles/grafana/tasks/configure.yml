@@ -1,0 +1,9 @@
+- name: Update the Grafana domain
+  community.general.ini_file:
+    path: /etc/grafana/grafana.ini
+    section: server
+    option: domain
+    value: "{{ grafana_domain }}"
+    mode: "0640"
+  notify:
+    - Restart the Grafana service
