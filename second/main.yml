@@ -8,3 +8,5 @@
     - role: crio
 
     - role: geerlingguy.docker
+
+    - role: minikube

@@ -1,0 +1,14 @@
+- name: Install Minikube
+  ansible.builtin.import_role:
+    name: gantsign.minikube
+
+- name: Install Minikube Service
+  ansible.builtin.template:
+    src: minikube.service.j2
+    dest: /etc/systemd/system/minikube.service
+    mode: "0644"
+  notify:
+    - Restart Minikube
+
+- name: Ensure handlers are notified now to avoid kubectl conflicts
+  ansible.builtin.meta: flush_handlers
