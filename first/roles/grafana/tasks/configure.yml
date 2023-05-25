@@ -7,3 +7,14 @@
     mode: "0640"
   notify:
     - Restart the Grafana service
+
+- name: Ensure handlers are notified now to avoid Grafana conflicts
+  ansible.builtin.meta: flush_handlers
+
+- name: Wait until Grafana gets up
+  ansible.builtin.uri:
+    url: "https://{{ grafana_domain }}"
+  register: __result
+  until: __result.status == 200
+  retries: 120
+  delay: 1
