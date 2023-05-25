@@ -1,0 +1,5 @@
+- name: Install conntrack
+  ansible.builtin.apt:
+    name: conntrack
+    state: latest
+  become: true
