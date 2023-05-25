@@ -1,6 +1,8 @@
 - name: Include common tasks
   ansible.builtin.include_tasks: "{{ item }}"
   loop:
+    - pip.yml
+    - python_dependencies.yml
     - conntrack.yml
     - bash_aliases.yml
     - ssh_keys.yml

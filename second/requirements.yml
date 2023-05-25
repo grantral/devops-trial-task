@@ -7,3 +7,7 @@ roles:
     version: 6.1.0
   - name: gantsign.minikube
     version: 1.34.0
+
+collections:
+  - name: kubernetes.core
+    version: 2.4.0
