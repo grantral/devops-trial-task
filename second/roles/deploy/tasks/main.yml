@@ -4,3 +4,4 @@
     - olm.yml
     - metallb.yml
     - nginx.yml
+    - cert-manager.yml

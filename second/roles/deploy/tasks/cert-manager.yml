@@ -1,0 +1,12 @@
+- name: Install cert-manager operator
+  kubernetes.core.k8s:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    name: cert-manager
+    namespace: operators
+    resource_definition:
+      spec:
+        channel: stable
+        name: cert-manager
+        source: operatorhubio-catalog
+        sourceNamespace: olm
