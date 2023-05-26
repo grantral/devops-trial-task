@@ -1,0 +1,59 @@
+- name: Create gitlab-system namespace
+  kubernetes.core.k8s:
+    kind: Namespace
+    name: gitlab-system
+
+- name: Create GitLab OperatorGroup
+  kubernetes.core.k8s:
+    api_version: operators.coreos.com/v1
+    kind: OperatorGroup
+    name: operatorgroup
+    namespace: gitlab-system
+    resource_definition:
+      spec:
+        targetNamespaces:
+          - gitlab-system
+
+- name: Create GitLab Subscription
+  kubernetes.core.k8s:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    name: gitlab-operator-kubernetes
+    namespace: gitlab-system
+    resource_definition:
+      spec:
+        channel: stable
+        name: gitlab-operator-kubernetes
+        source: operatorhubio-catalog
+        sourceNamespace: olm
+
+# TODO: Waits for the subscription's status.installPlanRef to be set
+# https://github.com/operator-framework/kubectl-operator/issues/13#issuecomment-957015437
+- name: Pause for 30 seconds to deploy GitLab operator
+  ansible.builtin.pause:
+    seconds: 30
+
+- name: Install GitLab
+  kubernetes.core.k8s:
+    api_version: apps.gitlab.com/v1beta1
+    kind: GitLab
+    name: gitlab
+    namespace: gitlab-system
+    resource_definition:
+      spec:
+        chart:
+          version: "{{ gitlab_chart_version }}"
+          values:
+            global:
+              hosts:
+                domain: "{{ gitlab_base_domain }}"
+              hpa:
+                apiVersion: autoscaling/v2
+              ingress:
+                class: nginx
+            nginx-ingress:
+              enabled: false
+            certmanager:
+              install: false
+            certmanager-issuer:
+              email: admin@skyload.info

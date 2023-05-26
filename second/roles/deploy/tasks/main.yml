@@ -5,3 +5,4 @@
     - metallb.yml
     - nginx.yml
     - cert-manager.yml
+    - gitlab.yml

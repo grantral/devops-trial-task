@@ -15,3 +15,5 @@ helm_diff_version: v3.8.0
 olm_version: v0.24.0
 metallb_chart_version: v0.13.9
 nginx_chart_version: 4.6.1
+gitlab_chart_version: 6.11.2
+gitlab_base_domain: k8s.skyload.info
