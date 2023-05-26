@@ -1,7 +1,18 @@
-- name: Install olm CRDs
+- name: Install OLM CRDs
   kubernetes.core.k8s:
     src: https://github.com/operator-framework/operator-lifecycle-manager/releases/download/{{ olm_version }}/crds.yaml
 
-- name: Install olm
+- name: Install OLM
   kubernetes.core.k8s:
     src: https://github.com/operator-framework/operator-lifecycle-manager/releases/download/{{ olm_version }}/olm.yaml
+
+- name: Wait until OLM is up
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: olm
+    label_selectors:
+      - app=olm-operator
+  register: olm_pod_list
+  until: olm_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
+  retries: 12
+  delay: 10

@@ -27,11 +27,16 @@
         source: operatorhubio-catalog
         sourceNamespace: olm
 
-# TODO: Waits for the subscription's status.installPlanRef to be set
-# https://github.com/operator-framework/kubectl-operator/issues/13#issuecomment-957015437
-- name: Pause for 120 seconds to deploy GitLab operator
-  ansible.builtin.pause:
-    seconds: 120
+- name: Wait until GitLab operator is up
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: gitlab-system
+    label_selectors:
+      - control-plane=controller-manager
+  register: gitlab_pod_list
+  until: gitlab_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
+  retries: 12
+  delay: 10
 
 - name: Install GitLab
   kubernetes.core.k8s:
