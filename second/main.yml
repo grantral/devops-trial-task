@@ -12,3 +12,6 @@
     - role: minikube
 
     - role: helm
+
+    - role: deploy
+      become: false

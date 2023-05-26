@@ -1,0 +1,7 @@
+- name: Install olm CRDs
+  kubernetes.core.k8s:
+    src: https://github.com/operator-framework/operator-lifecycle-manager/releases/download/{{ olm_version }}/crds.yaml
+
+- name: Install olm
+  kubernetes.core.k8s:
+    src: https://github.com/operator-framework/operator-lifecycle-manager/releases/download/{{ olm_version }}/olm.yaml
