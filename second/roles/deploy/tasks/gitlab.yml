@@ -29,9 +29,9 @@
 
 # TODO: Waits for the subscription's status.installPlanRef to be set
 # https://github.com/operator-framework/kubectl-operator/issues/13#issuecomment-957015437
-- name: Pause for 30 seconds to deploy GitLab operator
+- name: Pause for 120 seconds to deploy GitLab operator
   ansible.builtin.pause:
-    seconds: 30
+    seconds: 120
 
 - name: Install GitLab
   kubernetes.core.k8s:
