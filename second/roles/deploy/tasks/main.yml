@@ -3,3 +3,4 @@
   loop:
     - olm.yml
     - metallb.yml
+    - nginx.yml
