@@ -7,3 +7,4 @@
     - cert-manager.yml
     - gitlab.yml
     - prometheus.yml
+    - prometheus-community.yml
