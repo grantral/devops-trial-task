@@ -10,3 +10,5 @@
     - role: geerlingguy.docker
 
     - role: minikube
+
+    - role: helm
