@@ -13,3 +13,4 @@ helm_diff_version: v3.8.0
 
 # Deploy configuration
 olm_version: v0.24.0
+metallb_chart_version: v0.13.9
