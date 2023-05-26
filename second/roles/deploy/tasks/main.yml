@@ -6,3 +6,4 @@
     - nginx.yml
     - cert-manager.yml
     - gitlab.yml
+    - prometheus.yml

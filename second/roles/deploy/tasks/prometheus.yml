@@ -1,0 +1,38 @@
+- name: Create prometheus-system namespace
+  kubernetes.core.k8s:
+    kind: Namespace
+    name: prometheus-system
+
+- name: Install Prometheus operator
+  kubernetes.core.k8s:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    name: prometheus
+    namespace: operators
+    resource_definition:
+      spec:
+        channel: beta
+        name: prometheus
+        source: operatorhubio-catalog
+        sourceNamespace: olm
+
+- name: Wait until Prometheus operator is up
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: operators
+    label_selectors:
+      - app.kubernetes.io/name=prometheus-operator
+  register: prometheus_pod_list
+  until: prometheus_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
+  retries: 12
+  delay: 10
+
+- name: Install Prometheus
+  kubernetes.core.k8s:
+    api_version: monitoring.coreos.com/v1
+    kind: Prometheus
+    name: prometheus
+    namespace: prometheus-system
+    resource_definition:
+      spec:
+        replicas: 1
