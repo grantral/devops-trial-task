@@ -1,0 +1,77 @@
+- name: Create grafana-system namespace
+  kubernetes.core.k8s:
+    kind: Namespace
+    name: grafana-system
+
+- name: Create Grafana OperatorGroup
+  kubernetes.core.k8s:
+    api_version: operators.coreos.com/v1
+    kind: OperatorGroup
+    name: operatorgroup
+    namespace: grafana-system
+    resource_definition:
+      spec:
+        targetNamespaces:
+          - grafana-system
+
+- name: Create Grafana Subscription
+  kubernetes.core.k8s:
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    name: grafana-operator
+    namespace: grafana-system
+    resource_definition:
+      spec:
+        channel: v4
+        name: grafana-operator
+        source: operatorhubio-catalog
+        sourceNamespace: olm
+
+- name: Wait until Grafana operator is up
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: grafana-system
+    label_selectors:
+      - control-plane=controller-manager
+  register: grafana_pod_list
+  until: grafana_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
+  retries: 12
+  delay: 10
+
+- name: Install Grafana
+  kubernetes.core.k8s:
+    api_version: integreatly.org/v1alpha1
+    kind: Grafana
+    name: grafana
+    namespace: grafana-system
+    resource_definition:
+      spec:
+        config:
+          auth:
+            disable_login_form: false
+            disable_signout_menu: false
+          auth.anonymous:
+            enabled: false
+          security:
+            admin_user: admin
+            admin_password: admin
+          server:
+            domain: "{{ grafana_domain }}"
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hostname: "{{ grafana_domain }}"
+          path: /
+          pathType: Prefix
+          tlsEnabled: true
+
+- name: Wait until Grafana is up
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: grafana-system
+    label_selectors:
+      - app=grafana
+  register: grafanas_pod_list
+  until: grafanas_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
+  retries: 12
+  delay: 10
