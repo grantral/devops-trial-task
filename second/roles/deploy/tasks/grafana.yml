@@ -84,7 +84,7 @@
     namespace: grafana-system
     resource_definition:
       spec:
-        name: prometheus
+        name: prometheus-datasource.yaml
         datasources:
           - name: Prometheus
             type: prometheus
