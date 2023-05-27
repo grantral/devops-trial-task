@@ -46,6 +46,7 @@
     namespace: grafana-system
     resource_definition:
       spec:
+        baseImage: docker.io/grafana/grafana:{{ grafana_version }}
         ingress:
           enabled: true
           ingressClassName: nginx
