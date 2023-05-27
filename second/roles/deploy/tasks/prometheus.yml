@@ -27,6 +27,54 @@
   retries: 12
   delay: 10
 
+- name: Create Prometheus ServiceAccount
+  kubernetes.core.k8s:
+    kind: ServiceAccount
+    name: prometheus
+    namespace: prometheus-system
+
+- name: Create Prometheus ClusterRole
+  kubernetes.core.k8s:
+    api_version: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    name: prometheus
+    resource_definition:
+      rules:
+        - apiGroups: [""]
+          resources:
+            - nodes
+            - nodes/metrics
+            - services
+            - endpoints
+            - pods
+          verbs: ["get", "list", "watch"]
+        - apiGroups: [""]
+          resources:
+            - configmaps
+          verbs: ["get"]
+        - apiGroups:
+            - networking.k8s.io
+          resources:
+            - ingresses
+          verbs: ["get", "list", "watch"]
+        - nonResourceURLs: ["/metrics"]
+          verbs: ["get"]
+
+- name: Create Prometheus ClusterRoleBinding
+  kubernetes.core.k8s:
+    api_version: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    name: prometheus
+    resource_definition:
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: prometheus
+      subjects:
+        - kind: ServiceAccount
+          name: prometheus
+          namespace: prometheus-system
+
 - name: Install Prometheus
   kubernetes.core.k8s:
     api_version: monitoring.coreos.com/v1
@@ -36,3 +84,20 @@
     resource_definition:
       spec:
         replicas: 1
+        serviceAccountName: prometheus
+        serviceMonitorSelector: {}
+        serviceMonitorNamespaceSelector: {}
+
+- name: Create Prometheus ServiceMonitor
+  kubernetes.core.k8s:
+    api_version: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    name: prometheus
+    namespace: prometheus-system
+    resource_definition:
+      spec:
+        selector:
+          matchLabels:
+            operated-prometheus: "true"
+        endpoints:
+          - port: web
