@@ -49,11 +49,14 @@
         baseImage: docker.io/grafana/grafana:{{ grafana_version }}
         ingress:
           enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-production
           ingressClassName: nginx
           hostname: "{{ grafana_domain }}"
           path: /
           pathType: Prefix
           tlsEnabled: true
+          tlsSecretName: "{{ grafana_domain }}-tls"
         config:
           auth:
             disable_login_form: false

@@ -10,3 +10,37 @@
         name: cert-manager
         source: operatorhubio-catalog
         sourceNamespace: olm
+
+- name: Create Let's Encrypt staging cluster issuer
+  kubernetes.core.k8s:
+    api_version: cert-manager.io/v1
+    kind: ClusterIssuer
+    name: letsencrypt-staging
+    resource_definition:
+      spec:
+        acme:
+          server: https://acme-staging-v02.api.letsencrypt.org/directory
+          email: admin@skyload.info
+          privateKeySecretRef:
+            name: letsencrypt-staging
+          solvers:
+            - http01:
+                ingress:
+                  ingressClassName: nginx
+
+- name: Create Let's Encrypt production cluster issuer
+  kubernetes.core.k8s:
+    api_version: cert-manager.io/v1
+    kind: ClusterIssuer
+    name: letsencrypt-production
+    resource_definition:
+      spec:
+        acme:
+          server: https://acme-v02.api.letsencrypt.org/directory
+          email: admin@skyload.info
+          privateKeySecretRef:
+            name: letsencrypt-production
+          solvers:
+            - http01:
+                ingress:
+                  ingressClassName: nginx
