@@ -125,6 +125,21 @@
           id: 1860
           revision: 31
 
+- name: Import Prometheus 2.0 Stats dashboard
+  kubernetes.core.k8s:
+    api_version: integreatly.org/v1alpha1
+    kind: GrafanaDashboard
+    name: prometheus-stats
+    namespace: grafana-system
+    resource_definition:
+      metadata:
+        labels:
+          app: prometheus
+      spec:
+        grafanaCom:
+          id: 15489
+          revision: 2
+
 - name: Import ingress nginx request handling performance dashboard
   kubernetes.core.k8s:
     api_version: integreatly.org/v1alpha1
