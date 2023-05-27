@@ -46,6 +46,13 @@
     namespace: grafana-system
     resource_definition:
       spec:
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hostname: "{{ grafana_domain }}"
+          path: /
+          pathType: Prefix
+          tlsEnabled: true
         config:
           auth:
             disable_login_form: false
@@ -57,13 +64,9 @@
             admin_password: admin
           server:
             domain: "{{ grafana_domain }}"
-        ingress:
-          enabled: true
-          ingressClassName: nginx
-          hostname: "{{ grafana_domain }}"
-          path: /
-          pathType: Prefix
-          tlsEnabled: true
+        dashboardLabelSelector:
+          - matchExpressions:
+              - { key: app, operator: Exists }
 
 - name: Wait until Grafana is up
   kubernetes.core.k8s_info:
@@ -92,3 +95,29 @@
             isDefault: true
             version: 1
             editable: true
+
+- name: Import ingress nginx controller dashboard
+  kubernetes.core.k8s:
+    api_version: integreatly.org/v1alpha1
+    kind: GrafanaDashboard
+    name: ingress-nginx-controller
+    namespace: grafana-system
+    resource_definition:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/helm-chart-{{ nginx_chart_version }}/deploy/grafana/dashboards/nginx.json
+
+- name: Import ingress nginx request handling performance dashboard
+  kubernetes.core.k8s:
+    api_version: integreatly.org/v1alpha1
+    kind: GrafanaDashboard
+    name: ingress-nginx-request-handling-performance
+    namespace: grafana-system
+    resource_definition:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/helm-chart-{{ nginx_chart_version }}/deploy/grafana/dashboards/request-handling-performance.json
