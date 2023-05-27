@@ -11,6 +11,17 @@
         source: operatorhubio-catalog
         sourceNamespace: olm
 
+- name: Wait until cert-manager operator is up
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: operators
+    label_selectors:
+      - app.kubernetes.io/name=cert-manager
+  register: cert_manager_pod_list
+  until: cert_manager_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
+  retries: 12
+  delay: 10
+
 - name: Create Let's Encrypt staging cluster issuer
   kubernetes.core.k8s:
     api_version: cert-manager.io/v1
@@ -19,8 +30,8 @@
     resource_definition:
       spec:
         acme:
-          server: https://acme-staging-v02.api.letsencrypt.org/directory
           email: admin@skyload.info
+          server: https://acme-staging-v02.api.letsencrypt.org/directory
           privateKeySecretRef:
             name: letsencrypt-staging
           solvers:
@@ -36,8 +47,8 @@
     resource_definition:
       spec:
         acme:
-          server: https://acme-v02.api.letsencrypt.org/directory
           email: admin@skyload.info
+          server: https://acme-v02.api.letsencrypt.org/directory
           privateKeySecretRef:
             name: letsencrypt-production
           solvers:
