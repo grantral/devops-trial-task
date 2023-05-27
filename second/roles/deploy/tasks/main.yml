@@ -1,10 +1,10 @@
 - name: Include deploy tasks
   ansible.builtin.include_tasks: "{{ item }}"
   loop:
-    - olm.yml
     - metallb.yml
+    - olm.yml
+    - prometheus.yml
+    - prometheus-community.yml
     - nginx.yml
     - cert-manager.yml
     - gitlab.yml
-    - prometheus.yml
-    - prometheus-community.yml

@@ -10,4 +10,10 @@
     create_namespace: true
     release_name: ingress-nginx
     release_namespace: ingress-nginx
+    release_values:
+      controller:
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
     wait: true
