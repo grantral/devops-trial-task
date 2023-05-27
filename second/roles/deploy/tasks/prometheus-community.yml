@@ -10,4 +10,8 @@
     create_namespace: true
     release_name: node-exporter
     release_namespace: prometheus-community
+    release_values:
+      prometheus:
+        monitor:
+          enabled: true
     wait: true
