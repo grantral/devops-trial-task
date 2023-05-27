@@ -75,3 +75,20 @@
   until: grafanas_pod_list | json_query('resources[*].status.phase') | unique == ["Running"]
   retries: 12
   delay: 10
+
+- name: Create Prometheus DataSource
+  kubernetes.core.k8s:
+    api_version: integreatly.org/v1alpha1
+    kind: GrafanaDataSource
+    name: prometheus
+    namespace: grafana-system
+    resource_definition:
+      spec:
+        name: prometheus
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://prometheus-operated.prometheus-system:9090
+            isDefault: true
+            version: 1
+            editable: true
