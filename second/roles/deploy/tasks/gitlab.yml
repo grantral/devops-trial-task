@@ -55,10 +55,24 @@
               hpa:
                 apiVersion: autoscaling/v2
               ingress:
+                annotations:
+                  cert-manager.io/cluster-issuer: letsencrypt-production
+                configureCertmanager: false
                 class: nginx
+            gitlab:
+              webservice:
+                ingress:
+                  tls:
+                    secretName: "gitlab.{{ gitlab_base_domain }}-tls"
+            minio:
+              ingress:
+                tls:
+                  secretName: "minio.{{ gitlab_base_domain }}-tls"
+            registry:
+              ingress:
+                tls:
+                  secretName: "registry.{{ gitlab_base_domain }}-tls"
             nginx-ingress:
               enabled: false
             certmanager:
               install: false
-            certmanager-issuer:
-              email: admin@skyload.info
