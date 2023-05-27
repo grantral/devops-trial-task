@@ -12,6 +12,8 @@
     release_namespace: ingress-nginx
     release_values:
       controller:
+        ingressClassResource:
+          default: true
         metrics:
           enabled: true
           serviceMonitor:
